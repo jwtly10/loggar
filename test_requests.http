@@ -1,6 +1,6 @@
 POST http://localhost:8080/api/v1/log
 
 {
-	"message": "Test message",
+	"message": "Test message 2",
 	"level": "ERROR"
 }

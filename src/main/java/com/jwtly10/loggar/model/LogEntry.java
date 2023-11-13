@@ -1,8 +1,8 @@
 package com.jwtly10.loggar.model;
 
-import java.sql.Date;
-
 import lombok.Data;
+
+import java.sql.Date;
 
 @Data
 public class LogEntry {
@@ -10,4 +10,3 @@ public class LogEntry {
     private String level;
     private Date timestamp;
 }
-
