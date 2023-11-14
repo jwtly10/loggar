@@ -11,9 +11,6 @@ import jakarta.validation.constraints.NotNull;
 
 import lombok.Data;
 
-import java.sql.Date;
-import java.time.LocalDateTime;
-
 @Data
 public class LogEntry {
 
@@ -31,7 +28,7 @@ public class LogEntry {
     @ValidLogLevel
     private String level;
 
-    private Date timestamp;
+    private String timestamp;
 
     @NotBlank(message = "Client cannot be blank or null")
     private String client;
@@ -44,7 +41,7 @@ public class LogEntry {
         this.message = message;
         this.level = level;
         this.client = client;
-        this.timestamp = Date.valueOf(LocalDateTime.now().toLocalDate());
+        this.timestamp = String.valueOf(System.currentTimeMillis());
     }
 
     public String toJson() throws JsonProcessingException {
