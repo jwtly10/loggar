@@ -1,6 +1,8 @@
 POST http://localhost:8080/api/v1/log
+Content-Type: application/json
 
 {
-	"message": "Test message 2",
-	"level": "ERROR"
+	"message": "Overloaded something on the server",
+	"level": "ERROR",
+    "client": "client1"
 }
