@@ -11,6 +11,8 @@ import jakarta.validation.constraints.NotNull;
 
 import lombok.Data;
 
+import java.time.Instant;
+
 @Data
 public class LogEntry {
 
@@ -41,7 +43,7 @@ public class LogEntry {
         this.message = message;
         this.level = level;
         this.client = client;
-        this.timestamp = String.valueOf(System.currentTimeMillis());
+        this.timestamp = Instant.ofEpochMilli(System.currentTimeMillis()).toString();
     }
 
     public String toJson() throws JsonProcessingException {

@@ -18,7 +18,7 @@ public class ElasticCloudServiceTest {
 
     @Test
     public void testElasticCloudIndex() {
-        LogEntry logEntry = new LogEntry("Testing if EC tests are working", "INFO", "FileFlow");
+        LogEntry logEntry = new LogEntry("Unit Test Log Entry", "INFO", "FileFlow");
 
         try {
             elasticCloudService.indexLogEntry(logEntry);

@@ -19,32 +19,21 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.time.Instant;
-
-// TODO: Refactor to inject dependencies
 
 @Service
 public class ElasticCloudService {
 
     private static final Logger logger = LoggerFactory.getLogger(ElasticCloudService.class);
 
-    @Value("${elastic.cloud.id}")
-    private String cloudId;
-
-    @Value("${elastic.cloud.api.key}")
-    private String apiKey;
-
-    @Value("${elastic.cloud.url}")
-    private String cloudUrl;
-
     private ElasticsearchClient elasticsearchClient;
 
-    public void indexLogEntry(LogEntry logEntry) throws ElasticsearchException, IOException {
+    private ElasticCloudService(
+            @Value("${elastic.cloud.url}") String cloudUrl,
+            @Value("${elastic.cloud.api.key}") String apiKey) {
+        this.elasticsearchClient = createElasticsearchClient(cloudUrl, apiKey);
+    }
 
-        // TODO: Refactor this, this is a hack to get round EC side timestamp parsing
-        logEntry.setTimestamp(
-                Instant.ofEpochMilli(Long.parseLong(logEntry.getTimestamp())).toString());
-
+    private ElasticsearchClient createElasticsearchClient(String cloudUrl, String apiKey) {
         RestClient restClient =
                 RestClient.builder(HttpHost.create(cloudUrl))
                         .setDefaultHeaders(
@@ -54,10 +43,12 @@ public class ElasticCloudService {
         ElasticsearchTransport transport =
                 new RestClientTransport(restClient, new JacksonJsonpMapper());
 
-        elasticsearchClient = new ElasticsearchClient(transport);
-        ElasticsearchClient esClient = elasticsearchClient;
+        return new ElasticsearchClient(transport);
+    }
 
-        IndexResponse res = esClient.index(i -> i.index("loggar").document(logEntry));
+    public void indexLogEntry(LogEntry logEntry) throws ElasticsearchException, IOException {
+
+        IndexResponse res = elasticsearchClient.index(i -> i.index("loggar").document(logEntry));
 
         logger.info("Indexed log entry with ID: {}", res);
     }
