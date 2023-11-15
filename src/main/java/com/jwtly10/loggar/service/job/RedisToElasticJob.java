@@ -32,7 +32,8 @@ public class RedisToElasticJob {
     }
 
     public boolean run() {
-        AtomicInteger count = new AtomicInteger(0);
+        // TODO: Handle errors and retry
+        AtomicInteger successCount = new AtomicInteger(0);
         try {
             Long index = redisService.getQueueSize();
             if (index == 0) {
@@ -46,21 +47,24 @@ public class RedisToElasticJob {
                                 try {
                                     elasticCloudService.indexLogEntry(
                                             objectMapper.readValue(message, LogEntry.class));
-                                    count.getAndIncrement();
+                                    successCount.getAndIncrement();
                                 } catch (Exception e) {
                                     logger.error("Error indexing log entry", e);
                                 }
                             });
 
-            if (count.get() != index) {
+            if (successCount.get() != index) {
                 logger.error(
                         "Redis queue size ({}) does not match number of indexed log entries ({})",
                         index,
-                        count.get());
+                        successCount.get());
                 return false;
             }
 
-            logger.info("Successfully processed {} Redis messages out of {}", count.get(), index);
+            logger.info(
+                    "Successfully processed {} Redis messages out of {}",
+                    successCount.get(),
+                    index);
             return true;
 
         } catch (Exception e) {

@@ -21,9 +21,7 @@ public class RedisServiceTest {
 
     @Test
     public void testRedisPublish() {
-
         try {
-
             LogEntry logEntry = new LogEntry("Unit_Test-testRedisPublish", "INFO", "Unit_Test");
             String serializedLogEntry = logEntry.toJson();
             redisService.publish(serializedLogEntry);
