@@ -41,4 +41,5 @@ secrets.yml
 .sts4-cache
 
 application.properties
+application-test.properties
 project.txt

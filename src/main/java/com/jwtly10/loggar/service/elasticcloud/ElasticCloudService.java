@@ -23,9 +23,12 @@ import java.io.IOException;
 @Service
 public class ElasticCloudService {
 
+    @Value("${elastic.index.name}")
+    private String elasticIndex;
+
     private static final Logger logger = LoggerFactory.getLogger(ElasticCloudService.class);
 
-    private ElasticsearchClient elasticsearchClient;
+    private final ElasticsearchClient elasticsearchClient;
 
     private ElasticCloudService(
             @Value("${elastic.cloud.url}") String cloudUrl,
@@ -48,8 +51,9 @@ public class ElasticCloudService {
 
     public void indexLogEntry(LogEntry logEntry) throws ElasticsearchException, IOException {
 
-        IndexResponse res = elasticsearchClient.index(i -> i.index("loggar").document(logEntry));
+        IndexResponse res =
+                elasticsearchClient.index(i -> i.index(elasticIndex).document(logEntry));
 
-        logger.info("Indexed log entry with ID: {}", res);
+        logger.debug("Indexed log entry with ID: {}", res);
     }
 }

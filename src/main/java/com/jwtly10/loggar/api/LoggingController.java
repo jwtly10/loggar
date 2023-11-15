@@ -19,7 +19,7 @@ public class LoggingController {
 
     private static final Logger logger = LoggerFactory.getLogger(LoggingController.class);
 
-    private LoggingServiceImpl loggingService;
+    private final LoggingServiceImpl loggingService;
 
     public LoggingController(LoggingServiceImpl loggingService) {
         this.loggingService = loggingService;

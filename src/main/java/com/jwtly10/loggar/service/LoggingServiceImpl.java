@@ -2,16 +2,16 @@ package com.jwtly10.loggar.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.jwtly10.loggar.model.LogEntry;
-import com.jwtly10.loggar.redis.RedisPublisher;
+import com.jwtly10.loggar.service.redis.RedisService;
 
 import org.springframework.stereotype.Service;
 
 @Service
 public class LoggingServiceImpl implements LoggingService {
 
-    private final RedisPublisher redisPublisher;
+    private final RedisService redisPublisher;
 
-    public LoggingServiceImpl(RedisPublisher redisPublisher) {
+    public LoggingServiceImpl(RedisService redisPublisher) {
         this.redisPublisher = redisPublisher;
     }
 
@@ -22,7 +22,7 @@ public class LoggingServiceImpl implements LoggingService {
 
             String serializedLogEntry = logEntry.toJson();
 
-            redisPublisher.publishToChannel(serializedLogEntry);
+            redisPublisher.publish(serializedLogEntry);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
