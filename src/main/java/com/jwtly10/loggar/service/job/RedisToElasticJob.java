@@ -69,6 +69,9 @@ public class RedisToElasticJob {
                     "Successfully processed {} Redis messages out of {}",
                     successCount.get(),
                     index);
+
+            redisService.deleteMessages(index);
+
             return true;
 
         } catch (Exception e) {
