@@ -7,6 +7,7 @@ import com.jwtly10.loggar.service.redis.RedisService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -31,13 +32,16 @@ public class RedisToElasticJob {
         this.objectMapper = objectMapper;
     }
 
+    @Scheduled(fixedDelayString = "${redis-to-elastic-job.fixed-delay}")
     public boolean run() {
+        logger.info("Running RedisToElasticJob");
         // TODO: Handle errors and retry
         AtomicInteger successCount = new AtomicInteger(0);
         try {
             Long index = redisService.getQueueSize();
             if (index == 0) {
                 logger.info("Redis queue is empty");
+                return true;
             }
 
             redisService
