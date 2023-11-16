@@ -23,16 +23,19 @@ public class LogEntry {
         ERROR
     }
 
-    @NotBlank(message = "Message cannot be blank or null")
+    @NotBlank(message = "Message cannot be blank")
+    @NotNull(message = "Message cannot be null")
     private String message;
 
     @NotNull(message = "Level cannot be null")
+    @NotBlank(message = "Level cannot be blank")
     @ValidLogLevel
     private String level;
 
     private String timestamp;
 
-    @NotBlank(message = "Client cannot be blank or null")
+    @NotBlank(message = "Client cannot be blank")
+    @NotNull(message = "Client cannot be null")
     private String client;
 
     @JsonCreator

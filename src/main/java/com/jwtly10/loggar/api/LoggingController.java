@@ -27,7 +27,6 @@ public class LoggingController {
         this.loggingService = loggingService;
     }
 
-    // Deprecated
     @PostMapping("/log")
     public ResponseEntity<String> logMessage(@Valid @RequestBody LogEntry logEntry) {
         try {
@@ -39,18 +38,21 @@ public class LoggingController {
         }
     }
 
+    // TODO: Validate list of log entries
     @PostMapping("/logs")
     public ResponseEntity<String> logMessages(@Valid @RequestBody List<LogEntry> logEntry) {
-        try {
-            Integer count = 0;
-            for (LogEntry log : logEntry) {
-                loggingService.log(log.getMessage(), log.getLevel(), log.getClient());
-                count++;
-            }
-            return ResponseEntity.ok(count + " log entries created");
-        } catch (Exception e) {
-            logger.error("Error creating log entries", e);
-            return ResponseEntity.badRequest().body("Error creating log entries");
-        }
+        // try {
+        // Integer count = 0;
+        // for (LogEntry log : logEntry) {
+        // loggingService.log(log.getMessage(), log.getLevel(), log.getClient());
+        // count++;
+        // }
+        // return ResponseEntity.ok(count + " log entries created");
+        // } catch (Exception e) {
+        // logger.error("Error creating log entries", e);
+        // return ResponseEntity.badRequest().body("Error creating log entries");
+        // }
+        //
+        return ResponseEntity.ok("Not implemented");
     }
 }
