@@ -21,8 +21,8 @@ import org.springframework.test.context.TestPropertySource;
 import java.util.List;
 
 @SpringBootTest
-@TestPropertySource(locations = "classpath:application-test.properties")
 @ExtendWith(MockitoExtension.class)
+@TestPropertySource(locations = "classpath:application-test.properties")
 public class RedisToElasticJobTest {
 
     @Mock private RedisService redisService;
@@ -35,6 +35,7 @@ public class RedisToElasticJobTest {
 
     @BeforeEach
     public void setup() {
+
         MockitoAnnotations.openMocks(this);
         redisToElasticJob = new RedisToElasticJob(redisService, elasticCloudService, objectMapper);
     }
@@ -61,7 +62,7 @@ public class RedisToElasticJobTest {
         try {
             this.redisToElasticJob.run();
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
         verify(redisService, times(1)).getQueueSize();

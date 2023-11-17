@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  loggar-app:
+    image: openjdk:17
+    build: .
+    volumes:
+      - /tmp
+    expose:
+      - 8080
+    ports:
+      - "8080:8080"
+    links:
+      - redis
+  redis:
+    image: "redis:latest"
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  redis_data:

@@ -43,3 +43,4 @@ secrets.yml
 application.properties
 application-test.properties
 project.txt
+.idea/
