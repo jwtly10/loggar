@@ -11,6 +11,21 @@ Built as a way to consolidate messages and errors across multiple projects, into
 - **Background Job:** A scheduled job retrieves logs from Redis and sends them to Elasticsearch, before clearing the redis queue.
 - **Retry Mechanism:** Implements a retry mechanism for handling failures when sending logs to Elasticsearch.
 - **Testing:** Includes both unit and integration tests to ensure robust functionality.
+- **Docker:** Production version runs on DigitalOcean using Docker to manage the environment
+- **CI/CD:** Github Actions automates the build and testing process, making pushing updates easy and efficient.
+
+## Docker
+To run locally clone repo and run the app:
+
+#### Build Project:
+```bash
+mvn clean install -Plocal
+```
+
+#### Spin up app and redis instance using Docker
+```bash
+docker-compose up -d --build
+```
 
 ## Usage
 ### Example Curl Command to Send Log Entry
@@ -47,3 +62,4 @@ curl -X POST \
     }
 ]'
 ```
+
