@@ -2,6 +2,7 @@ package com.jwtly10.loggar.api;
 
 import com.jwtly10.loggar.model.LogEntry;
 import com.jwtly10.loggar.service.LoggingServiceImpl;
+import com.jwtly10.loggar.service.security.SecurityService;
 
 import jakarta.validation.Valid;
 
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,15 +25,28 @@ public class LoggingController {
 
     private final LoggingServiceImpl loggingService;
 
-    public LoggingController(LoggingServiceImpl loggingService) {
+    private final SecurityService securityService;
+
+    public LoggingController(LoggingServiceImpl loggingService, SecurityService securityService) {
         this.loggingService = loggingService;
+        this.securityService = securityService;
     }
 
     @PostMapping("/log")
-    public ResponseEntity<String> logMessage(@Valid @RequestBody LogEntry logEntry) {
+    public ResponseEntity<String> logMessage(
+            @Valid @RequestBody LogEntry logEntry,
+            @RequestHeader("Authorization") String apiKey,
+            @RequestHeader("Timestamp") String timestamp,
+            @RequestHeader("Client") String client) {
+
         try {
-            loggingService.log(logEntry.getMessage(), logEntry.getLevel(), logEntry.getClient());
-            return ResponseEntity.ok("Log entry created");
+            if (securityService.validateKey(apiKey, timestamp, client)) {
+                loggingService.log(
+                        logEntry.getMessage(), logEntry.getLevel(), logEntry.getClient());
+                return ResponseEntity.ok("Log entry created");
+            } else {
+                return ResponseEntity.status(401).body("Authorization failed");
+            }
         } catch (Exception e) {
             logger.error("Error creating log entry", e);
             return ResponseEntity.badRequest().body("Error creating log entry");

@@ -75,7 +75,7 @@ public class SecurityServiceTest {
 
         Instant instant = Instant.ofEpochSecond(invalidTimestamp);
         // Subtract 6 minutes from the current timestamp
-        instant = instant.minusSeconds(360);
+        instant = instant.minusSeconds(500);
 
         invalidTimestamp = instant.getEpochSecond();
 

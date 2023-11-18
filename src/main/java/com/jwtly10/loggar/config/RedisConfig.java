@@ -19,7 +19,6 @@ public class RedisConfig {
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
-        System.out.println("redisHost: " + redisHost);
         RedisStandaloneConfiguration config =
                 new RedisStandaloneConfiguration(redisHost, redisPort);
         return new org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory(

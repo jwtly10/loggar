@@ -44,3 +44,4 @@ application-test.properties
 application-dev.properties
 project.txt
 .idea/
+*.http

@@ -1,5 +1,6 @@
 package com.jwtly10.loggar.service.security;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -8,9 +9,12 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Formatter;
 
 @Service
 public class SecurityService {
+
+    private static final Logger logger = org.slf4j.LoggerFactory.getLogger(SecurityService.class);
 
     @Value("${jwtly10.security.key}")
     private String internalKey;
@@ -20,14 +24,16 @@ public class SecurityService {
 
     public boolean validateKey(String apiKey, String timestamp, String client) {
         if (!validTimestamp(timestamp)) {
+            logger.error("Invalid timestamp: " + timestamp);
             return false;
         }
 
         if (!validClient(client)) {
+            logger.error("Invalid client: " + client);
             return false;
         }
 
-        String validKey = generateKey(client);
+        String validKey = generateKey(client, timestamp);
         if (validKey == null) {
             return false;
         }
@@ -35,9 +41,8 @@ public class SecurityService {
         return apiKey.equals(validKey);
     }
 
-    private String generateKey(String client) {
-        Long currentTimestamp = Instant.now().getEpochSecond();
-        String message = client + currentTimestamp + internalKey;
+    private String generateKey(String client, String timestamp) {
+        String message = client + timestamp + internalKey;
         try {
             return hash(message);
         } catch (NoSuchAlgorithmException e) {
@@ -64,9 +69,18 @@ public class SecurityService {
     }
 
     public String hash(String message) throws NoSuchAlgorithmException {
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        MessageDigest digest = MessageDigest.getInstance("SHA-512");
         byte[] hash = digest.digest(message.getBytes(StandardCharsets.UTF_8));
 
-        return new String(hash, StandardCharsets.UTF_8);
+        return byteArrayToHexString(hash);
+    }
+
+    private String byteArrayToHexString(byte[] bytes) {
+        try (Formatter formatter = new Formatter()) {
+            for (byte b : bytes) {
+                formatter.format("%02x", b);
+            }
+            return formatter.toString();
+        }
     }
 }
