@@ -4,6 +4,13 @@ services:
   loggar-app:
     image: openjdk:17
     build: .
+    environment:
+      - SPRING_REDIS_HOST=${SPRING_REDIS_HOST}
+      - SPRING_REDIS_CHANNEL=${SPRING_REDIS_CHANNEL}
+      - ELASTIC_CLOUD_ID=${ELASTIC_CLOUD_ID}
+      - ELASTIC_CLOUD_API_KEY=${ELASTIC_CLOUD_API_KEY}
+      - ELASTIC_CLOUD_URL=${ELASTIC_CLOUD_URL}
+      - ELASTIC_INDEX_NAME=${ELASTIC_INDEX_NAME}
     volumes:
       - /tmp
     expose:
