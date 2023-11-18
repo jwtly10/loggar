@@ -70,4 +70,6 @@ jobs:
             ELASTIC_CLOUD_API_KEY=${{ secrets.ELASTIC_CLOUD_API_KEY }} \
             ELASTIC_CLOUD_URL=${{ secrets.ELASTIC_CLOUD_URL }} \
             ELASTIC_INDEX_NAME=${{ secrets.ELASTIC_INDEX_NAME }} \
+            LOGGAR_SECURITY_CLIENTS=${{ secrets.LOGGAR_SECURITY_CLIENTS }} \
+            LOGGAR_SECURITY_KEY=${{ secrets.LOGGAR_SECURITY_KEY }} \
             docker-compose up -d --build
