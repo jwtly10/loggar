@@ -18,6 +18,15 @@ jobs:
         with:
           java-version: 17
 
+      - name: Cache Maven dependencies
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/*.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
       - name: Build Spring Boot App
         run: |
             mvn clean install -P prod -Dmaven.test.skip 
